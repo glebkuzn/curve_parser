@@ -1,0 +1,58 @@
+repos:
+  - repo: local
+    hooks:
+      - id: check-yaml
+        name: check-yaml
+        entry: check-yaml
+        types: [yaml]
+        language: system
+        args:
+          - --unsafe
+      - id: check-toml
+        name: check-toml
+        entry: check-toml
+        types: [toml]
+        language: system
+      - id: end-of-file-fixer
+        name: end-of-file-fixer
+        entry: end-of-file-fixer
+        language: system
+        exclude_types: [png]
+        exclude: '.*\.jpg$'
+      - id: trailing-whitespace
+        name: trailing-whitespace
+        entry: trailing-whitespace-fixer
+        language: system
+        args:
+          - --markdown-linebreak-ext=md
+        exclude_types: [png]
+        exclude: '.*\.jpg$'
+      - id: check-docstring-first
+        name: check-docstring-first
+        entry: check-docstring-first
+        types: [python]
+        language: system
+      - id: ruff
+        name: ruff
+        entry: ruff --fix .
+        language: python
+        pass_filenames: false
+      - id: isort
+        name: isort
+        entry: isort --settings-file pyproject.toml .
+        language: system
+        pass_filenames: false
+        files: ^src/
+      - id: black
+        name: black
+        entry: black .
+        language: system
+        pass_filenames: false
+        files: ^src/
+      - id: autoflake
+        name: autoflake
+        entry: autoflake
+        language: system
+        types: [python]
+        args: [ --in-place, --remove-all-unused-imports, --remove-duplicate-keys ]
+        files: ^src/
