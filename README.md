@@ -11,7 +11,7 @@ Python parser for curves to points graphs.
 5. введите в функцию get_points путь до картинки
 6. выберите крайние точки и названия осей
 7. сохраните в csv формате в папке data
-8. сохраните в виде графика через интерфейс plotly
+8. сохраните в виде графика через интерфейс plotly или seaborn в папку output
 
 # INSTALLATION
 
