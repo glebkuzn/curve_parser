@@ -1,6 +1,5 @@
-from math import fabs, log10
+from math import fabs
 
-import numpy as np
 import pandas as pd
 from PIL import Image
 
@@ -59,15 +58,8 @@ def get_border_grids(image, grid_colour):
 def get_linear_value(x, x1, x2, x1_value, x2_value):
     """получаем значение для текущего пикселя с учетом граничных значений сетки для линейной оси"""
     k = (x2 - x1) / (x2_value - x1_value)
-    b = x1 - k * x1_value
+    b = x1 - x1_value * k
     return (x - b) / k
-
-
-def get_log_value(x, x1, x2, x1_value, x2_value):
-    """получаем значение для текущего пикселя с учетом граничных значений сетки для логорифмической оси"""
-    k = (x1 - x2) / (log10(x1_value) - log10(x2_value))
-    b = x1 - k * log10(x1_value)
-    return 10 ** ((x - b) / k)
 
 
 def process_graph(
@@ -77,7 +69,6 @@ def process_graph(
     image = Image.open(image_path)
     width, height = image.size
     x1, x2, y1, y2 = get_border_grids(image, grid_colour)
-    y_mean = 0
     coordinates = []
     y_list = []
     for x in range(width):
@@ -90,14 +81,8 @@ def process_graph(
             y = pixels[better_colour_value(pixels.keys(), colour)]
             x_value = get_linear_value(x, x1, x2, x1_value, x2_value)
             y_value = get_linear_value(height - y, y1, y2, y1_value, y2_value)
-            if x > 6:
-                y_mean = np.mean(y_list[-5:-1])
-            else:
-                coordinates.append((x_value, y_value))
-                y_list.append(y)
-            if abs(y - y_mean) < 10:
-                coordinates.append((x_value, y_value))
-                y_list.append(y)
+            coordinates.append((x_value, y_value))
+            y_list.append(y)
 
     return coordinates
 
